@@ -44,6 +44,9 @@ for content in ['books', 'films']:
 				if len(genre) and len(genre[0]):
 					item['content']['genre'] = genre[0].text.strip()
 					
+				info = element.xpath('.//*[@class="info list-rates-info"]')
+				if len(info) and len(info[0]):
+					item['info'] = map(lambda str: str.strip(), info[0].text.split('<br>'))
 				
 				if first:
 					first = False
