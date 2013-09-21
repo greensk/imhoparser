@@ -37,7 +37,7 @@ for content in ['books', 'films']:
 				item['content']['title'] = element.xpath('.//*[@class="title"]/a')[0].text.strip()
 				
 				authors = element.xpath('.//*[@class="authors"]')
-				if len(authors):
+				if len(authors) and authors[0].text is not None:
 					item['content']['authors'] = authors[0].text.strip()
 					
 				genre = element.xpath('.//*[@class="styles"]')
