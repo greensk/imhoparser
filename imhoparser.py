@@ -41,8 +41,9 @@ for content in ['books', 'films']:
 					item['content']['authors'] = authors[0].text.strip()
 					
 				genre = element.xpath('.//*[@class="styles"]')
-				if len(genre) and genre[0].text:
+				if len(genre) and len(genre[0]):
 					item['content']['genre'] = genre[0].text.strip()
+					
 				
 				if first:
 					first = False
