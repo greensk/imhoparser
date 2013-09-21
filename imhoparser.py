@@ -41,8 +41,12 @@ for content in ['books', 'films']:
 					item['content']['authors'] = authors[0].text.strip()
 					
 				genre = element.xpath('.//*[@class="styles"]')
-				if len(genre) and len(genre[0]):
+				if len(genre) and genre[0].text is not None:
 					item['content']['genre'] = genre[0].text.strip()
+					
+				country = element.xpath('.//*[@class="country"]')
+				if len(country) and country[0].text is not None:
+					item['content']['country'] = country[0].text.strip()
 					
 				info = element.xpath('.//*[@class="info list-rates-info"]')
 				if len(info) and len(info[0]):
