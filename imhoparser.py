@@ -2,7 +2,6 @@
 # * coding: utf8 *
 from urllib import urlopen
 from lxml import etree
-import re
 import simplejson
 import sys
 
