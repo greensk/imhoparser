@@ -1,7 +1,7 @@
 imhoparser
 ==========
 
-Утилита для извлечения данных профиля с сайта imhonet.ru и сохранение их в формате JSON.
+Утилита для извлечения данных профиля с сайта imhonet.ru и сохранения их в формате JSON.
 
 ## Использование
 
@@ -18,6 +18,9 @@ imhoparser
 			{
 				"content": {
 					"authors": "Лев Толстой",
+					"genre": [
+						"Проза XIX-XX веков"
+					],
 					"link": "http://books.imhonet.ru/element/169253/",
 					"title": "Воскресение"
 				},
@@ -31,7 +34,7 @@ imhoparser
 		"films" : [
 			{
 				"content": {
-					"country": "США, 2006 год",
+					"origin": "США, 2006 год",
 					"link": "http://films.imhonet.ru/element/187576/",
 					"title": "V значит Вендетта"
 				},

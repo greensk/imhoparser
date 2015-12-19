@@ -8,6 +8,18 @@ import sys
 if len(sys.argv) < 2:
 	print 'USAGE: imhoparser.py username'
 	quit()
+	
+def getAuthor(elementUrl):
+	elementText = urlopen(elementUrl).read().decode('utf8')
+	elementDoc = etree.HTML(elementText)
+	
+	authorName = elementDoc.xpath('//*[@class="m-person-block-item-name"]')
+	
+	if len(authorName) and authorName[0].text is not None:
+		return authorName[0].text.strip()
+	else:
+		return None
+	
 username = sys.argv[1]
 firstPart = True
 print '{'
@@ -22,32 +34,37 @@ for content in ['books', 'films']:
 	first = True
 	for rate in range(1,11):
 	
-		url = 'http://%s.imhonet.ru/content/%s/rates/all/?rate=%d' % (username, content, rate)
+		url = 'http://%s.imhonet.ru/content/%s/rates/%d' % (username, content, rate)
 		while 1:
 			
 			text = urlopen(url).read().decode('utf8')
 			doc = etree.HTML(text)
 			
-			for element in doc.xpath('//*[@class="element-type clearfix"]'):
+			for element in doc.xpath('//*[@class="m-rate-list-item"]'):
 				
 				item = {'content' : {}, 'rate' : rate}
 				
-				item['content']['link'] = element.xpath('.//*[@class="title"]/a')[0].attrib['href']
-				item['content']['title'] = element.xpath('.//*[@class="title"]/a')[0].text.strip()
+				item['content']['link'] = element.xpath('.//a[@class="m-rate-item-content-header-link"]')[0].attrib['href']
+				item['content']['title'] = element.xpath('.//a[@class="m-rate-item-content-header-link"]')[0].text.strip()
 				
-				authors = element.xpath('.//*[@class="authors"]')
-				if len(authors) and authors[0].text is not None:
-					item['content']['authors'] = authors[0].text.strip()
+				if content == 'books':
+					authors = getAuthor(item['content']['link'])
+					if authors is not None:
+						item['content']['authors'] = authors
 					
-				genre = element.xpath('.//*[@class="styles"]')
+				genre = element.xpath('.//*[@class="m-rate-item-content-genres"]')
 				if len(genre) and genre[0].text is not None:
-					item['content']['genre'] = genre[0].text.strip()
-					
+					item['content']['genre'] = map(unicode.strip, genre[0].text.split(','))
+				
+				origin = element.xpath('.//*[@class="m-rate-item-content-countries"]')
+				if len(origin) and origin[0].text is not None:
+					item['content']['origin'] = origin[0].text.strip()
+				
 				country = element.xpath('.//*[@class="country"]')
 				if len(country) and country[0].text is not None:
 					item['content']['country'] = country[0].text.strip()
 					
-				info = element.xpath('.//*[@class="info list-rates-info"]')
+				info = element.xpath('.//*[@class="m-rate-item-text"]')
 				if len(info) and len(info[0]):
 					item['info'] = map(lambda str: str.strip(), info[0].text.split('<br>'))
 				
@@ -65,8 +82,4 @@ for content in ['books', 'films']:
 			url = nxt[0].attrib['href']
 	print ']'
 print '}'	
-			
-			
-			
-			
-		
+
