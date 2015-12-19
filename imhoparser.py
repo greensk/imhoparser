@@ -65,8 +65,8 @@ for content in ['books', 'films']:
 					item['content']['country'] = country[0].text.strip()
 					
 				info = element.xpath('.//*[@class="m-rate-item-text"]')
-				if len(info) and len(info[0]):
-					item['info'] = map(lambda str: str.strip(), info[0].text.split('<br>'))
+				if len(info) and info[0].text is not None:
+					item['info'] = info[0].text.strip()
 				
 				if first:
 					first = False
